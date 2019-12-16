@@ -8,6 +8,8 @@ public class PlayerController : NetworkBehaviour
     private Camera mainCamera;
     private TextMesh nameLabel;
 
+    private CustomNetworkManager networkManager;
+
     const float RUNNING_SPEED = 10.0f;
     const float ROTATION_SPEED = 180.0f;
 
@@ -20,6 +22,7 @@ public class PlayerController : NetworkBehaviour
     void SyncNameChanged(string name) { nameLabel.text = name; }
 
     // OnGUI /////////////////////////////////////////
+  
 
     private void OnGUI()
     {
@@ -35,9 +38,21 @@ public class PlayerController : NetworkBehaviour
             }
 
             GUILayout.EndArea();
+
+
+            short newIndex = (short)GUILayout.SelectionGrid(
+                networkManager.playerPrefabIndex, networkManager.playerNames, 3);
+
+            if(newIndex != networkManager.playerPrefabIndex)
+            {
+                networkManager.playerPrefabIndex = newIndex;
+                CmdChangePlayerPrefab(newIndex);
+            }
+
         }
     }
 
+   
     // Animation sync ////////////////////////////////
     [SyncVar(hook ="OnSetAnimation")]
     string animationName;
@@ -83,6 +98,8 @@ public class PlayerController : NetworkBehaviour
         animator = GetComponent<Animator>();
         mainCamera = Camera.main;
         nameLabel = transform.Find("Label").gameObject.GetComponent<TextMesh>();
+        NetworkManager mng = NetworkManager.singleton;
+        networkManager = mng.GetComponent<CustomNetworkManager>();
     }
 
     // Update is called once per frame
@@ -146,6 +163,15 @@ public class PlayerController : NetworkBehaviour
             }
         }
     }
+
+
+    [Command]
+    void CmdChangePlayerPrefab(int prefabIndex)
+    {
+        networkManager.ChangePlayerPrefab(this, prefabIndex);
+    }
+
+ 
 
     private void OnDestroy()
     {

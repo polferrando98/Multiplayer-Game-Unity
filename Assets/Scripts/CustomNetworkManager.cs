@@ -72,6 +72,17 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
+    public void ChangePlayerPrefab(PlayerController currentPlayer, int prefabIndex)
+    {
+        GameObject newPlayer = Instantiate(spawnPrefabs[prefabIndex],
+            currentPlayer.gameObject.transform.position,
+            currentPlayer.gameObject.transform.rotation);
+
+        NetworkServer.Destroy(currentPlayer.gameObject);
+
+        NetworkServer.ReplacePlayerForConnection(currentPlayer.connectionToClient, newPlayer, 0);
+    }
+
 
 
     // Start is called before the first frame update

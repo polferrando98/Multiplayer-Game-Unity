@@ -157,6 +157,11 @@ public class PlayerController : NetworkBehaviour
                 mainCamera.transform.LookAt(transform.position + new Vector3(0.0f, 2.0f, 0.0f), Vector3.up);
             }
 
+            if (Input.GetMouseButtonDown(0))
+            {
+                CmdAddProjectile();
+            }
+
             if (nameLabel)
             {
                 nameLabel.transform.rotation = Quaternion.identity;
@@ -171,7 +176,11 @@ public class PlayerController : NetworkBehaviour
         networkManager.ChangePlayerPrefab(this, prefabIndex);
     }
 
- 
+    [Command]
+    public void CmdAddProjectile()
+    {
+        networkManager.AddObject(4, this.transform);
+    }
 
     private void OnDestroy()
     {

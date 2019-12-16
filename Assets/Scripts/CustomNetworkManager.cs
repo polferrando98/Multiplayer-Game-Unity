@@ -83,7 +83,15 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.ReplacePlayerForConnection(currentPlayer.connectionToClient, newPlayer, 0);
     }
 
+    public void AddObject(int objIndex, Transform t)
+    {
+        GameObject newObject = Instantiate<GameObject>(
+            spawnPrefabs[objIndex],
+            t.position,
+            Quaternion.identity);
 
+        NetworkServer.Spawn(newObject);
+    }
 
     // Start is called before the first frame update
     void Start()

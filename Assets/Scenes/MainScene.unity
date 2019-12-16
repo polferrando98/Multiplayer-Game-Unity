@@ -845,7 +845,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1948988924}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -822479833, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Script: {fileID: 11500000, guid: a4c0d968dc64e7e46b1e01a95e03cb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
@@ -857,13 +857,16 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1312910371334386, guid: f9333802a5f8b4946b29953d834fd803,
+  m_PlayerPrefab: {fileID: 1257418296221528, guid: c6a9c7e7c16341641b600a8afb07f8e1,
     type: 3}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 1
   m_OfflineScene: 
   m_OnlineScene: 
   m_SpawnPrefabs:
+  - {fileID: 1257418296221528, guid: c6a9c7e7c16341641b600a8afb07f8e1, type: 3}
+  - {fileID: 1312910371334386, guid: f9333802a5f8b4946b29953d834fd803, type: 3}
+  - {fileID: 1038044222218232, guid: 089efe2e42b3bd843be29fbae98aef0a, type: 3}
   - {fileID: 8488014651104748210, guid: 0c8cc6e05b196ed46a3099eb2cb9b4f9, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
@@ -920,6 +923,11 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
+  playerPrefabIndex: 1
+  playerNames:
+  - Boy
+  - Girl
+  - Robot
 --- !u!4 &1948988927
 Transform:
   m_ObjectHideFlags: 0

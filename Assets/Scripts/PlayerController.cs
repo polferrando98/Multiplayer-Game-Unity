@@ -100,6 +100,7 @@ public class PlayerController : NetworkBehaviour
         nameLabel = transform.Find("Label").gameObject.GetComponent<TextMesh>();
         NetworkManager mng = NetworkManager.singleton;
         networkManager = mng.GetComponent<CustomNetworkManager>();
+        StartCoroutine("SpawOverTime");
     }
 
     // Update is called once per frame
@@ -113,17 +114,23 @@ public class PlayerController : NetworkBehaviour
             float horizontalAxis = Input.GetAxis("Horizontal");
             float verticalAxis = Input.GetAxis("Vertical");
 
+            translation += new Vector3(0.0f, 0.0f, 1 * RUNNING_SPEED * Time.deltaTime);
+            transform.Translate(translation);
+
             if (verticalAxis > 0.0)
             {
-                setAnimation("Running");
-                translation += new Vector3(0.0f, 0.0f, verticalAxis * RUNNING_SPEED * Time.deltaTime);
-                transform.Translate(translation);
+                //setAnimation("Running");
+                //translation += new Vector3(0.0f, 0.0f, verticalAxis * RUNNING_SPEED * Time.deltaTime);
+                //transform.Translate(translation);
             }
+
+
+
             else if (verticalAxis < 0.0)
             {
-                setAnimation("Running backwards");
-                translation += new Vector3(0.0f, 0.0f, verticalAxis * RUNNING_SPEED * Time.deltaTime * 0.5f);
-                transform.Translate(translation);
+                //setAnimation("Running backwards");
+                //translation += new Vector3(0.0f, 0.0f, verticalAxis * RUNNING_SPEED * Time.deltaTime * 0.5f);
+                //transform.Translate(translation);
             }
             else
             {
@@ -153,13 +160,13 @@ public class PlayerController : NetworkBehaviour
 
             if (mainCamera)
             {
-                mainCamera.transform.SetPositionAndRotation(transform.position + new Vector3(0.0f, 4.0f, -3.0f), Quaternion.identity);
-                mainCamera.transform.LookAt(transform.position + new Vector3(0.0f, 2.0f, 0.0f), Vector3.up);
+                //mainCamera.transform.SetPositionAndRotation(transform.position + new Vector3(0.0f, 4.0f, -3.0f), Quaternion.identity);
+                //mainCamera.transform.LookAt(transform.position + new Vector3(0.0f, 2.0f, 0.0f), Vector3.up);
             }
 
             if (Input.GetMouseButtonDown(0))
             {
-                CmdAddProjectile();
+                //CmdAddProjectile();
             }
 
             if (nameLabel)
@@ -184,5 +191,22 @@ public class PlayerController : NetworkBehaviour
 
     private void OnDestroy()
     {
+    }
+
+    IEnumerator SpawOverTime()
+    {
+        while (true)
+        {
+            CmdAddProjectile();
+            yield return new WaitForSeconds(0.1f);
+        }
+
+
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+
+        Debug.Log("Collided");
     }
 }

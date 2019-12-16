@@ -93,6 +93,14 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.Spawn(newObject);
     }
 
+    [ClientRpc]
+
+    void RpcRunThisFunctionOnClient()
+    {
+        // do something in all clients
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 public class PlayerController : NetworkBehaviour
 {
     private Animator animator;
@@ -15,8 +16,21 @@ public class PlayerController : NetworkBehaviour
 
     private bool panel_displayed;
 
-    [SerializeField]
+
+    [SyncVar(hook = "LiveChanged")]
+    bool alive = true;
+
+
+
+    [SyncVar(hook = "SpeedChanged")]
     public float RUNNING_SPEED = 3.0f;
+
+    [Command]
+    void CmdChangeSpeed(float speed) { RUNNING_SPEED = speed; }
+    void SpeedChanged(float speed) { RUNNING_SPEED = speed; }
+
+
+
     public float ROTATION_SPEED = 180.0f;
 
     // Name sync /////////////////////////////////////
@@ -216,26 +230,37 @@ public class PlayerController : NetworkBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("dying");
+        if (!isLocalPlayer)
+            return;
+
+            Debug.Log("dying");
         CmdSetAlive(false);
+        CmdChangeSpeed(0);
     }
 
-    [SyncVar(hook = "LiveChanged")]
-    bool alive = true;
 
     [Command]
-    void CmdSetAlive(bool new_alive) { RUNNING_SPEED = 0.0f; alive = new_alive; }
+    void CmdSetAlive(bool new_alive)
+    {
+        alive = new_alive;
+        Instantiate<GameObject>(loose_panel, FindObjectOfType<Canvas>().gameObject.transform);
+    }
     void LiveChanged(bool new_alive)
     {
         StopAllCoroutines();
 
-        RUNNING_SPEED = 0.0f;
 
-        if (!panel_displayed)
+
+
+        if (!isLocalPlayer)
         {
-            if (isLocalPlayer) Instantiate<GameObject>(loose_panel, FindObjectOfType<Canvas>().gameObject.transform);
-            else Instantiate<GameObject>(win_panel, FindObjectOfType<Canvas>().gameObject.transform);
-            panel_displayed = true;
+            Debug.Log(alive);
+            Debug.Log(new_alive);
+            Debug.Log("- hook-");
+            if (FindObjectOfType<Image>() == null)
+                Instantiate<GameObject>(win_panel, FindObjectOfType<Canvas>().gameObject.transform);
+
         }
+
     }
 }

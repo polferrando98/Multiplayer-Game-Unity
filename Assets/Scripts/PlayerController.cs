@@ -8,10 +8,16 @@ public class PlayerController : NetworkBehaviour
     private Camera mainCamera;
     private TextMesh nameLabel;
 
+    public GameObject win_panel;
+    public GameObject loose_panel;
+
     private CustomNetworkManager networkManager;
 
-    const float RUNNING_SPEED = 1.0f;
-    const float ROTATION_SPEED = 180.0f;
+    private bool panel_displayed;
+
+    [SerializeField]
+    public float RUNNING_SPEED = 3.0f;
+    public float ROTATION_SPEED = 180.0f;
 
     // Name sync /////////////////////////////////////
     [SyncVar(hook = "SyncNameChanged")]
@@ -95,6 +101,7 @@ public class PlayerController : NetworkBehaviour
     // Use this for initialization
     void Start ()
     {
+        panel_displayed = false;
         animator = GetComponent<Animator>();
         mainCamera = Camera.main;
         nameLabel = transform.Find("Label").gameObject.GetComponent<TextMesh>();
@@ -106,6 +113,8 @@ public class PlayerController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         if (isLocalPlayer)
         {
             Vector3 translation = new Vector3();
@@ -203,13 +212,30 @@ public class PlayerController : NetworkBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-
     }
 
     void OnTriggerEnter(Collider other)
     {
-
-        //networkManager.CmdKill(this.gameObject);
+        Debug.Log("dying");
+        CmdSetAlive(false);
     }
 
+    [SyncVar(hook = "LiveChanged")]
+    bool alive = true;
+
+    [Command]
+    void CmdSetAlive(bool new_alive) { RUNNING_SPEED = 0.0f; alive = new_alive; }
+    void LiveChanged(bool new_alive)
+    {
+        StopAllCoroutines();
+
+        RUNNING_SPEED = 0.0f;
+
+        if (!panel_displayed)
+        {
+            if (isLocalPlayer) Instantiate<GameObject>(loose_panel, FindObjectOfType<Canvas>().gameObject.transform);
+            else Instantiate<GameObject>(win_panel, FindObjectOfType<Canvas>().gameObject.transform);
+            panel_displayed = true;
+        }
+    }
 }

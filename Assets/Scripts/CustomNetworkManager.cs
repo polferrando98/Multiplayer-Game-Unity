@@ -85,11 +85,11 @@ public class CustomNetworkManager : NetworkManager
         NetworkServer.ReplacePlayerForConnection(currentPlayer.connectionToClient, newPlayer, 0);
     }
 
-    public void AddObject(int objIndex, Transform t)
+    public void AddObject(int objIndex, Vector3 pos)
     {
         GameObject newObject = Instantiate<GameObject>(
             spawnPrefabs[objIndex],
-            t.position,
+            pos,
             Quaternion.identity);
 
         NetworkServer.Spawn(newObject);
@@ -116,4 +116,6 @@ public class CustomNetworkManager : NetworkManager
     {
         
     }
+
+
 }

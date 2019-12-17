@@ -10,7 +10,7 @@ public class PlayerController : NetworkBehaviour
 
     private CustomNetworkManager networkManager;
 
-    const float RUNNING_SPEED = 10.0f;
+    const float RUNNING_SPEED = 1.0f;
     const float ROTATION_SPEED = 180.0f;
 
     // Name sync /////////////////////////////////////
@@ -186,12 +186,14 @@ public class PlayerController : NetworkBehaviour
     [Command]
     public void CmdAddProjectile()
     {
-        networkManager.AddObject(4, this.transform);
+        Vector3 a_bit_behind = this.transform.position;
+        float offset = 2;
+
+        a_bit_behind = a_bit_behind - this.transform.forward * offset;
+        networkManager.AddObject(4, a_bit_behind);
     }
 
-    private void OnDestroy()
-    {
-    }
+
 
     IEnumerator SpawOverTime()
     {
@@ -207,6 +209,7 @@ public class PlayerController : NetworkBehaviour
     void OnTriggerEnter(Collider other)
     {
 
-        Debug.Log("Collided");
+        //networkManager.CmdKill(this.gameObject);
     }
+
 }

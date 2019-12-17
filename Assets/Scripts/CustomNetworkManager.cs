@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
+using UnityEngine.UI;
 
 public class MsgTypes
 {
@@ -16,7 +18,7 @@ public class MsgTypes
 public class CustomNetworkManager : NetworkManager
 {
     public short playerPrefabIndex;
-
+    
 
     //Executed in the server
     public override void OnStartServer()
@@ -99,6 +101,8 @@ public class CustomNetworkManager : NetworkManager
     //{
     //    // do something in all clients
     //}
+
+   
 
 
     // Start is called before the first frame update
